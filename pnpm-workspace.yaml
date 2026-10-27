@@ -1,0 +1,3 @@
+virtualStoreType: global
+allowBuilds:
+  esbuild: true
