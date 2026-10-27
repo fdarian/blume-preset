@@ -19,6 +19,6 @@ Shared look and behavior for [Blume](https://useblume.dev) docs sites. Blume has
 
 ## Gotchas
 
-- Blume reads `components.ts` statically, so sites list `@fdarian/blume-preset/chapters` literally; the package cannot register it.
+- Blume reads `components.ts` statically, so sites list `@fdarian/blume-preset/chapters.tsx` literally (Blume picks the framework from the file extension, so the export keeps `.tsx`); the package cannot register it.
 - The config module is evaluated twice (jiti, then Astro): keep `src/index.ts` and the integration free of side effects.
 - A release is a tag: after changing `src`, `git tag -f` or bump the version, and reinstall in the consumer.
