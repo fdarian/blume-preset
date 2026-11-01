@@ -116,8 +116,16 @@ header {
 		column-gap: 0;
 	}
 
-	header[data-blume-header] {
+	header[data-blume-header],
+	[data-blume-footer] {
 		padding-inline: max(1.5rem, calc((100% - var(--preset-shell-width)) / 2));
+	}
+}
+
+/* The socials list's negative margin would pull its icon past the header's theme button */
+@media (max-width: 71.999rem) {
+	[data-blume-footer] ul:has(a[aria-label]) {
+		margin-inline-end: 0;
 	}
 }
 
@@ -190,6 +198,68 @@ header {
 	);
 }
 
+/* Below 72rem the tabs stay in the header bar, so the dropdown has no job */
+[data-preset-nav-root] {
+	display: none;
+}
+
+.preset-nav-positioner {
+	z-index: 50;
+}
+
+.preset-nav-popup {
+	min-width: max(var(--anchor-width), 11rem);
+	padding: 0.25rem;
+	border: 1px solid var(--blume-border);
+	border-radius: var(--blume-radius, 0.5rem);
+	background: var(--blume-background);
+	box-shadow: 0 8px 24px -8px rgb(0 0 0 / 0.15);
+	font-size: 0.8rem;
+	outline: none;
+	transition:
+		opacity 150ms ease,
+		transform 150ms ease;
+}
+
+.preset-nav-popup[data-starting-style],
+.preset-nav-popup[data-ending-style] {
+	opacity: 0;
+	transform: translateY(-0.25rem);
+}
+
+.preset-nav-popup ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.preset-nav-popup a {
+	display: block;
+	padding: 0.3rem calc(0.35rem - 1px);
+	border-radius: calc(var(--blume-radius, 0.5rem) - 0.15rem);
+	color: var(--preset-faint);
+	text-decoration: none;
+}
+
+.preset-nav-popup a:hover {
+	background: var(--blume-muted);
+	color: var(--blume-foreground);
+}
+
+.preset-nav-popup a[aria-current="page"] {
+	color: var(--blume-foreground);
+	font-weight: 600;
+}
+
+.preset-nav-group {
+	display: block;
+	padding: 0.3rem calc(0.35rem - 1px) 0.1rem;
+	font-size: 0.66rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--preset-faint);
+}
+
 @media (min-width: 72rem) {
 	[data-blume-doc-grid] {
 		display: block;
@@ -226,6 +296,69 @@ header {
 		padding: var(--preset-top-space) 0 0;
 		backdrop-filter: none;
 		background: var(--blume-background);
+	}
+
+	/* Header tabs fold into a dropdown under the logo; nav-menu.tsx mounts the trigger in place of the hidden bar */
+	:root:has(header[data-blume-header] > nav) {
+		--preset-header-height: calc(var(--preset-top-space) + 4.5rem);
+	}
+
+	/* The trigger hangs left of the column by its padding, so its text lines up with the logo */
+	header[data-blume-header] {
+		--preset-nav-inset: 0.6rem;
+	}
+
+	header[data-blume-header] > nav {
+		display: none;
+	}
+
+	/* Between 72rem and 73.4rem the sidebar starts closer to the edge than the inset, so the trigger stays inside the column */
+	@media (max-width: 73.4rem) {
+		header[data-blume-header] {
+			--preset-nav-inset: 0rem;
+		}
+	}
+
+	header[data-blume-header] > [data-preset-nav-root] {
+		display: block;
+		margin-inline-start: calc(-1 * var(--preset-nav-inset));
+	}
+
+	.preset-nav-trigger {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		height: 1.75rem;
+		padding-inline: var(--preset-nav-inset);
+		border: 0;
+		border-radius: var(--blume-radius, 0.5rem);
+		background: transparent;
+		color: var(--blume-foreground);
+		font: inherit;
+		font-size: 0.82rem;
+		cursor: pointer;
+		transition: background-color 120ms ease;
+	}
+
+	.preset-nav-trigger:hover,
+	.preset-nav-trigger[data-popup-open] {
+		background: color-mix(in oklab, var(--blume-foreground) 7%, transparent);
+	}
+
+	.preset-nav-trigger::after {
+		content: "";
+		width: 0.4rem;
+		height: 0.4rem;
+		margin-top: -0.2rem;
+		border: solid var(--blume-foreground);
+		border-width: 0 1.5px 1.5px 0;
+		transform: rotate(45deg);
+		transition: transform 0.15s;
+	}
+
+	.preset-nav-trigger[data-popup-open]::after {
+		margin-top: 0.2rem;
+		transform: rotate(225deg);
 	}
 
 	/* Same font size and line height as the article h1, so the two share a baseline */
@@ -271,6 +404,54 @@ header {
 		padding-bottom: 4rem;
 		padding-top: 0.5rem;
 	}
+
+	/* Footer links and copyright sit under the article; the band's border and gutters go */
+	[data-blume-footer] {
+		max-width: var(--preset-content-width);
+		margin-inline: auto;
+		padding-inline: 0;
+		border: 0;
+	}
+
+	/* A socials-only footer has nothing left in flow, so its row must not leave an empty band */
+	[data-blume-footer]:not(
+			:has(
+				> div > p,
+				> div > ul > li > a:not([aria-label]),
+				> div > ul > li > button
+			)
+		)
+		> div {
+		min-height: 0;
+		padding-block: 0;
+	}
+
+	/* Socials join the sidebar's bottom row, above its opaque background (header is z-40) */
+	[data-blume-footer] ul:has(a[aria-label]) {
+		position: fixed;
+		z-index: 41;
+		bottom: 0;
+		left: var(--preset-sidebar-left);
+		width: var(--preset-sidebar-width);
+		justify-content: flex-end;
+		gap: 0.25rem;
+		margin: 0;
+		padding-block: 0.75rem;
+		/* The empty part of the row must not swallow clicks meant for search and theme */
+		pointer-events: none;
+	}
+
+	[data-blume-footer] ul:has(a[aria-label]) a {
+		width: 1.75rem;
+		height: 1.75rem;
+		color: var(--preset-faint);
+		pointer-events: auto;
+	}
+
+	[data-blume-footer] ul:has(a[aria-label]) svg {
+		width: 0.9rem;
+		height: 0.9rem;
+	}
 }
 
 /* Chapter indicator: a rail of ticks floating right of the article; hover opens the outline */
@@ -279,7 +460,7 @@ header {
 }
 
 @media (min-width: 72rem) {
-	/* The aside only hosts the indicator island; its page actions stay hidden */
+	/* The aside only hosts the indicator island; its page actions stay hidden (the edit link returns from 80rem) */
 	[data-blume-toc] {
 		display: block !important;
 		height: 0;
@@ -404,5 +585,48 @@ header {
 
 	.preset-chapters-card a[aria-current="location"] .preset-chapters-dash {
 		opacity: 1;
+	}
+}
+
+/* Blume only moves the page actions into the aside from 80rem, so the edit link ends the page from there up */
+@media (min-width: 80rem) {
+	/* Static and auto-height, so the aside's content follows the article instead of riding the viewport */
+	[data-blume-toc] {
+		position: static;
+		height: auto;
+	}
+
+	[data-blume-toc] > [data-blume-page-actions] {
+		display: block;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	/* Only with an edit link, so a site without `github` gains no height; matches main's bottom padding */
+	[data-blume-toc] > [data-blume-page-actions]:has(a[href*="/edit/"]) {
+		padding-bottom: 2.5rem;
+	}
+
+	[data-blume-page-actions] > :not(a[href*="/edit/"]) {
+		display: none;
+	}
+
+	[data-blume-page-actions] > a[href*="/edit/"] {
+		width: max-content;
+		margin: 0;
+		padding-inline: 0;
+		font-size: 0.75rem;
+		font-weight: 400;
+		color: var(--preset-faint);
+	}
+
+	[data-blume-page-actions] > a[href*="/edit/"]:hover {
+		color: var(--blume-foreground);
+	}
+
+	[data-blume-page-actions] > a[href*="/edit/"] svg {
+		width: 0.9rem;
+		height: 0.9rem;
 	}
 }

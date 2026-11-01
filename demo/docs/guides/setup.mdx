@@ -1,0 +1,49 @@
+---
+title: Setup
+description: The three files that wire the preset into a Blume site.
+---
+
+Blume has no preset mechanism, so three files in your site wire it up.
+
+## Config
+
+`withPreset` wraps your site's config. Put site-specific config inside it.
+
+```ts blume.config.ts
+import { defineConfig } from 'blume';
+import { withPreset } from '@fdarian/blume-preset';
+
+export default defineConfig(
+	withPreset({
+		title: 'My docs',
+		// site-specific config only
+	}),
+);
+```
+
+`withPreset` sets accent, radius, mode, fonts and `markdown.externalLinks`. Anything you set in your own `theme` or `markdown` wins. It also adds an integration so the dev server can serve islands under pnpm's global virtual store.
+
+## Theme
+
+Import the preset's stylesheet from your own `theme.css`.
+
+```css theme.css
+@import "@fdarian/blume-preset/theme.css";
+```
+
+## Components
+
+Register the chapter rail as the table of contents.
+
+```ts components.ts
+import { defineComponents } from 'blume';
+
+export default defineComponents({
+	layout: {
+		TableOfContents: {
+			component: '@fdarian/blume-preset/chapters.tsx',
+			client: 'load',
+		},
+	},
+});
+```

@@ -48,6 +48,17 @@ export default defineComponents({
 
 `withPreset` sets accent, radius, mode, fonts and `markdown.externalLinks`. Anything you set in your own `theme` or `markdown` wins. It also adds an integration so the dev server can serve islands under pnpm's global virtual store.
 
+If your site sets `navigation.tabs`, from 1152px up the tabs fold into a dropdown under the logo instead of a bar across the header. `withPreset` injects the script for it, so there is nothing more to wire up.
+
+## Demo
+
+A sample site that uses the preset lives in `demo/`:
+
+```sh
+pnpm install
+pnpm run demo
+```
+
 ## License
 
 Apache-2.0

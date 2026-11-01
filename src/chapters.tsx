@@ -45,7 +45,8 @@ function useActiveSlug(headings: Heading[]) {
 				current = elements.length - 1;
 			} else {
 				elements.forEach((element, index) => {
-					if (element.getBoundingClientRect().top <= TRIGGER_OFFSET) {
+					// A heading scrolled to via its anchor can land a fraction of a pixel past the offset
+					if (Math.floor(element.getBoundingClientRect().top) <= TRIGGER_OFFSET) {
 						current = index;
 					}
 				});

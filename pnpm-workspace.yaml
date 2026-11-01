@@ -1,3 +1,5 @@
 virtualStoreType: global
 allowBuilds:
   esbuild: true
+packages:
+  - demo
