@@ -1,5 +1,6 @@
 import type { BlumeConfig } from 'blume';
 import { createAllowFsIntegration } from './allow-fs-integration.ts';
+import { createNavMenuIntegration } from './nav-menu-integration.ts';
 
 const presetTheme: NonNullable<BlumeConfig['theme']> = {
 	accent: 'blue',
@@ -15,6 +16,10 @@ export function withPreset(config: BlumeConfig): BlumeConfig {
 		...config,
 		theme: { ...presetTheme, ...config.theme },
 		markdown: { externalLinks: true, ...config.markdown },
-		integrations: [createAllowFsIntegration(), ...(config.integrations ?? [])],
+		integrations: [
+			createAllowFsIntegration(),
+			createNavMenuIntegration(),
+			...(config.integrations ?? []),
+		],
 	};
 }

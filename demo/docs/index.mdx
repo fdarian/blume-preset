@@ -1,0 +1,134 @@
+---
+title: Blume preset
+description: A quiet, centered docs look for Blume, shown on a site that uses it.
+---
+
+This site is wired up the way a real one is: three small files in `demo/` pull in the theme, the config defaults and the chapter rail. Everything on this page is either styled by the preset or left to Blume's defaults, so it doubles as a visual check.
+
+## What it changes
+
+The preset replaces Blume's default two-sidebar layout with one tight column. The article is 40rem wide, the sidebar is 14rem and hangs off the article's left edge, and the right-hand table of contents is replaced by a floating chapter rail.
+
+### Layout
+
+From 64rem the page is a sidebar and an article. From 72rem the article is the centered element, the sidebar is fixed beside it, and the logo sits at the top of the sidebar column with search and the theme toggle at the bottom.
+
+### Type and color
+
+Body text is 0.9rem with slightly tightened letter spacing. Colors are a warm off-white and near-black in light mode, with a matching dark palette. Section headings are small and medium weight, and the first heading on a page sits closer to the title than later ones.
+
+### Config defaults
+
+`withPreset` sets the accent, radius, mode, fonts and `markdown.externalLinks`:
+
+| Setting | Preset value |
+| --- | --- |
+| `theme.accent` | `blue` |
+| `theme.radius` | `lg` |
+| `theme.mode` | `light` |
+| `theme.fonts` | Inter for display and body, Geist Mono for code |
+| `markdown.externalLinks` | `true` |
+
+Anything the site sets in its own `theme` or `markdown` wins over these values.
+
+## The chapter rail
+
+At 72rem and wider, a column of short ticks floats to the right of the article, one per heading. The tick for the section you are reading is longer and darker. Hover the rail to open a card listing every heading, and click an entry to jump to it.
+
+### Where it shows
+
+The rail needs at least two headings on the page, so a page with one heading or none has no rail. Below 72rem it is hidden.
+
+### Nested headings
+
+The card lists `h2` and `h3` headings. An `h3` is indented under its section, which is why this page has `h3`s under several `h2`s.
+
+## Inherited Blume defaults
+
+The preset leaves Blume's own components alone. They pick up the new colors and radius, nothing more.
+
+### Code
+
+Inline code such as `withPreset` is set a little smaller than the surrounding text. Code blocks keep Blume's styling on the preset's code background:
+
+```ts blume.config.ts
+import { defineConfig } from 'blume';
+import { withPreset } from '@fdarian/blume-preset';
+
+export default defineConfig(
+	withPreset({
+		title: 'Blume preset',
+	}),
+);
+```
+
+### Quotes and lists
+
+> A blockquote is not restyled by the preset. It looks the way Blume draws it.
+
+- An unordered list item
+- Another item, with `inline code`
+  - A nested item
+
+1. An ordered list item
+2. Another item
+
+### Callouts
+
+:::note[Selector-based]
+The preset restyles Blume through its published selectors, such as `.prose h2` and `[data-blume-doc-grid]`. It does not patch Blume itself.
+:::
+
+<Callout type="tip" title="Try the rail">
+  Widen the window to 72rem or more, then hover the ticks at the right of the article.
+</Callout>
+
+### Tabs
+
+<Tabs>
+  <Tab title="pnpm">
+    ```sh
+    pnpm add github:fdarian/blume-preset#v0.1.0
+    ```
+  </Tab>
+  <Tab title="npm">
+    ```sh
+    npm install github:fdarian/blume-preset#v0.1.0
+    ```
+  </Tab>
+</Tabs>
+
+### Steps
+
+<Steps>
+  <Step title="Install the package">
+    Add it from a git tag. It is not published to npm.
+  </Step>
+  <Step title="Wrap your config">
+    Pass your site's config through `withPreset`.
+  </Step>
+  <Step title="Add the stylesheet and the island">
+    Import `theme.css` and register the chapter rail in `components.ts`.
+  </Step>
+</Steps>
+
+### Cards and badges
+
+<CardGroup cols={2}>
+  <Card title="Setup" href="/guides/setup" icon="rocket">
+    The three files that wire the preset into a site.
+  </Card>
+  <Card title="Blume" href="https://useblume.dev" icon="book-open">
+    The docs framework this preset styles.
+  </Card>
+</CardGroup>
+
+<Badge variant="accent">Git tag</Badge> <Badge>Not on npm</Badge> <Badge variant="success">Source only</Badge>
+
+## Links
+
+Links to your own pages, like the [setup guide](/guides/setup), open in the same tab. With `markdown.externalLinks` on, an absolute link such as [Blume's site](https://useblume.dev) opens in a new tab and gets a small arrow after its text.
+
+## Where this site lives
+
+The demo is a workspace package in `demo/`. It imports the preset by package name, so it exercises the same exports that a consumer installing from a git tag gets.
