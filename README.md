@@ -46,6 +46,29 @@ export default defineComponents({
 });
 ```
 
+To also move search and the theme toggle into a row under the sidebar nav, next to a version link and a GitHub link, replace the sidebar. Blume has no props for this, so wrap it in a small component of your own:
+
+```ts
+// components.ts, inside layout
+Sidebar: './src/components/Sidebar.astro',
+```
+
+```astro
+---
+// src/components/Sidebar.astro
+import PresetSidebar from '@fdarian/blume-preset/sidebar.astro';
+---
+
+<PresetSidebar
+	{...Astro.props}
+	version="1.2.0"
+	changelog="/changelog"
+	repository="https://github.com/you/repo"
+/>
+```
+
+`version`, `changelog` and `repository` are all optional. Below 1152px the header keeps its own search and theme toggle.
+
 `withPreset` sets accent, radius, mode, fonts and `markdown.externalLinks`. Anything you set in your own `theme` or `markdown` wins. It also adds an integration so the dev server can serve islands under pnpm's global virtual store.
 
 If your site sets `navigation.tabs`, from 1152px up the tabs fold into a dropdown under the logo instead of a bar across the header. `withPreset` injects the script for it, so there is nothing more to wire up.
