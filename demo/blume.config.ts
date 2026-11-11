@@ -1,5 +1,5 @@
-import { defineConfig } from 'blume';
 import { withPreset } from '@fdarian/blume-preset';
+import { defineConfig } from 'blume';
 
 export default defineConfig(
 	withPreset({
@@ -11,6 +11,7 @@ export default defineConfig(
 			dir: 'demo',
 		},
 		navigation: {
+			repo: false,
 			tabs: [
 				{ label: 'Docs', path: '/' },
 				{ label: 'Guides', path: '/guides' },

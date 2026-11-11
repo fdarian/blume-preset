@@ -67,7 +67,7 @@ import PresetSidebar from '@fdarian/blume-preset/sidebar.astro';
 />
 ```
 
-`version`, `changelog` and `repository` are all optional. Below 1152px the header keeps its own search and theme toggle.
+`version`, `changelog` and `repository` are all optional. When you pass `repository`, also set `navigation.repo: false` in your Blume config so Blume doesn't pin its own GitHub icon at the bottom of the sidebar. Below 1152px the header keeps its own search and theme toggle.
 
 `withPreset` sets accent, radius, mode, fonts and `markdown.externalLinks`. Anything you set in your own `theme` or `markdown` wins. It also adds an integration so the dev server can serve islands under pnpm's global virtual store.
 
