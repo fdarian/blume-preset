@@ -405,6 +405,32 @@ header {
 		padding-top: 0.5rem;
 	}
 
+	/* With the sidebar footer (sidebar.astro) the header's search and theme toggle live there instead. blume-search stays: it owns the dialog */
+	:root:has([data-preset-sidebar-footer])
+		header[data-blume-header]
+		:is([data-blume-search-open], [data-blume-theme-toggle]) {
+		display: none;
+	}
+
+	/* An emptied bottom row must not paint a bar, but stays in the DOM so the search dialog still opens */
+	:root:has([data-preset-sidebar-footer])
+		header[data-blume-header]
+		> div:last-child:not(
+			:has(> :not(blume-search, [data-blume-theme-toggle]))
+		) {
+		height: 0;
+		padding-block: 0;
+		background: transparent;
+		pointer-events: none;
+	}
+
+	:root:has([data-preset-sidebar-footer]):not(
+			:has([data-blume-footer] ul a[aria-label])
+		)
+		[data-blume-nav-drawer] {
+		padding-bottom: 0;
+	}
+
 	/* Footer links and copyright sit under the article; the band's border and gutters go */
 	[data-blume-footer] {
 		max-width: var(--preset-content-width);
@@ -451,6 +477,71 @@ header {
 	[data-blume-footer] ul:has(a[aria-label]) svg {
 		width: 0.9rem;
 		height: 0.9rem;
+	}
+}
+
+/* sidebar.astro footer: version, GitHub, search and theme toggle in one quiet row under the nav */
+[data-preset-sidebar-footer] {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-top: 1.25rem;
+	font-size: 0.7rem;
+	color: var(--preset-faint);
+}
+
+[data-preset-sidebar-footer] a,
+[data-preset-sidebar-footer] button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: inherit;
+	text-decoration: none;
+}
+
+[data-preset-sidebar-footer] a:hover,
+[data-preset-sidebar-footer] button:hover {
+	color: var(--blume-foreground);
+}
+
+[data-preset-sidebar-footer] a:has(svg),
+[data-preset-sidebar-footer] button {
+	width: 1.75rem;
+	height: 1.75rem;
+	margin-inline: -0.4rem;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+[data-preset-sidebar-footer] svg {
+	width: 0.9rem;
+	height: 0.9rem;
+}
+
+[data-preset-sidebar-tools] {
+	display: contents;
+}
+
+[data-preset-icon-light],
+[data-preset-icon-dark] {
+	display: inline-flex;
+}
+
+[data-preset-icon-dark],
+:root[data-theme="dark"] [data-preset-icon-light] {
+	display: none;
+}
+
+:root[data-theme="dark"] [data-preset-icon-dark] {
+	display: inline-flex;
+}
+
+/* Below 72rem the header keeps its own search and theme toggle */
+@media (max-width: 71.999rem) {
+	[data-preset-sidebar-tools] {
+		display: none;
 	}
 }
 

@@ -21,6 +21,13 @@
 			"correctness": { "noUnusedImports": { "level": "warn", "fix": "safe" } }
 		}
 	},
+	"overrides": [
+		{
+			// Biome only reads the frontmatter, so imports used in the template look unused and get removed
+			"includes": ["**/*.astro"],
+			"linter": { "rules": { "correctness": { "noUnusedImports": "off" } } }
+		}
+	],
 	"assist": {
 		"actions": {
 			"source": {

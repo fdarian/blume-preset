@@ -1,0 +1,10 @@
+---
+import PresetSidebar from '@fdarian/blume-preset/sidebar.astro';
+import pkg from '../../../package.json';
+---
+
+<PresetSidebar
+	{...Astro.props}
+	version={pkg.version}
+	repository="https://github.com/fdarian/blume-preset"
+/>
