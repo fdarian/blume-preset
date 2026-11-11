@@ -78,6 +78,7 @@ const hasLinks = Boolean(props.version || props.repository);
 						</button>
 					)
 				}
+				{data.config.search.enabled && data.config.theme.toggle && <span aria-hidden="true">&middot;</span>}
 				{
 					data.config.theme.toggle && (
 						<button
